@@ -1,8 +1,15 @@
+import graph
+
 import sys
 from PyQt5.QtWidgets import *
 #from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QAction, qApp
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QCoreApplication
+
+global fname1
+fname1 = ''
+global fname2
+fname2 = ''
 
 class Main_Window(QMainWindow):
 
@@ -11,22 +18,40 @@ class Main_Window(QMainWindow):
         super().__init__()
         self.initUI()
 
+        self.data1 = 0
+        self.data2 = 0
+
     # Button initial
     def initBTN(self):
         btn_quit = QPushButton('Quit', self)
-        btn_quit.move(420, 620)
+        btn_quit.move(360, 620)
         btn_quit.resize(btn_quit.sizeHint())
         btn_quit.clicked.connect(QCoreApplication.instance().quit)
 
-        btn_loadfile = QPushButton('Load', self)
-        btn_loadfile.move(50, 50)
-        btn_loadfile.clicked.connect(self.initLOAD)
+        btn_first_loadfile = QPushButton('File 1', self)
+        btn_first_loadfile.move(50, 50)
+        btn_first_loadfile.clicked.connect(self.initLOAD1)
+
+        btn_seccond_loadfile = QPushButton('File 2', self)
+        btn_seccond_loadfile.move(200, 50)
+        btn_seccond_loadfile.clicked.connect(self.initLOAD2)
 
     # FileLoad def
-    def initLOAD(self):
+    def initLOAD1(self):
         fname = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
         print(fname[0])
         print(fname[1])
+
+        graph.Main_graph.initDATA1(fname[0])
+
+    # FileLoad def
+    def initLOAD2(self):
+        global fname
+        fname = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
+        print(fname[0])
+        print(fname[1])
+
+        #graph.Main_graph.initDATA2(fname[0])
 
     # StatusBar initial
     def initSTATUS(self):
@@ -47,8 +72,8 @@ class Main_Window(QMainWindow):
     def initUI(self):
         self.setWindowTitle('YANA')
         self.setWindowIcon(QIcon('icon.png'))
-        self.setGeometry(300, 300, 515, 660)
-        self.setFixedSize(515, 660)
+        self.setGeometry(100, 100, 515, 700)
+        self.setFixedSize(515, 700)
         Main_Window.initBTN(self)
         Main_Window.initSTATUS(self)
         Main_Window.initMENU(self)
