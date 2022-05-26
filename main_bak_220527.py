@@ -1,6 +1,8 @@
-import matplotlib.pyplot as plt
-#import graph
+# Source import
+import graph
 
+
+# Pakage import
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
@@ -13,7 +15,6 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 # UI파일 연결
-# 단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
 form_class = uic.loadUiType("FireUI.ui")[0]
 
 #화면을 띄우는데 사용되는 Class 선언
@@ -21,7 +22,7 @@ class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
-        # self.initUI()
+        self.initUI()
 
 
     def initUI(self):
@@ -31,8 +32,6 @@ class WindowClass(QMainWindow, form_class) :
         self.initSTATUS()
         self.initMENU()
         self.initBTN()
-
-
 
     def initBTN(self):
         # 버튼 기능 연결
@@ -56,9 +55,9 @@ class WindowClass(QMainWindow, form_class) :
 
     def initBtnFileLoad1(self):
         print("Load1")
-        # global fname1
-        # fname1 = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
-        # #graph.Main_graph.initDATA1(fname1[0])
+        global fname1
+        fname1 = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
+        graph.Main_graph.initDATA1(fname1[0])
 
     def initBtnFileLoad2(self):
         print("Load2")
@@ -320,3 +319,27 @@ class WindowClass(QMainWindow, form_class) :
 #         # #self.resize(515,659)
 #         # self.show()
 #
+
+
+# Main code
+if __name__ == "__main__" :
+    #QApplication : 프로그램을 실행시켜주는 클래스
+    app = QApplication(sys.argv)
+    #WindowClass의 인스턴스 생성
+    myWindow = WindowClass()
+    #프로그램 화면을 보여주는 코드
+    myWindow.show()
+    #프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
+    app.exec_()
+
+# if __name__ == "__main__" :
+#     #QApplication : 프로그램을 실행시켜주는 클래스
+#     app = QApplication(sys.argv)
+#     #WindowClass의 인스턴스 생성
+#     mainWindow = QMainWindow()
+#     #프로그램 화면을 보여주는 코드
+#     mywindow = FireUI.Ui_Dialog()
+#     mywindow.setupUi(mainWindow)
+#     mainWindow.show()
+#     #프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
+#     app.exec_()
