@@ -160,8 +160,8 @@ class Ui_Dialog(QtWidgets.QMainWindow):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_FILE2.setText(_translate("Dialog", "파일2:"))
         self.label_FILE1.setText(_translate("Dialog", "파일1:"))
+        self.label_FILE2.setText(_translate("Dialog", "파일2:"))
         self.label_COE.setText(_translate("Dialog", "상관계수"))
         self.label_REL.setText(_translate("Dialog", "상관관계"))
         self.btnLOADFILE1.setText(_translate("Dialog", "첫번째 파일"))
