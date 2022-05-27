@@ -230,14 +230,14 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QRadioButton" name="radioButton_CURVED">
+         <widget class="QRadioButton" name="radiobtn_CURVED">
           <property name="text">
            <string>꺾은선</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_DISTRIBUTED">
+         <widget class="QRadioButton" name="radiobtn_DISTRIBUTED">
           <property name="text">
            <string>분산형</string>
           </property>
@@ -301,8 +301,8 @@
   <tabstop>btnLOADFILE1</tabstop>
   <tabstop>btnLOADFILE2</tabstop>
   <tabstop>comboBoxAREA</tabstop>
-  <tabstop>radioButton_CURVED</tabstop>
-  <tabstop>radioButton_DISTRIBUTED</tabstop>
+  <tabstop>radiobtn_CURVED</tabstop>
+  <tabstop>radiobtn_DISTRIBUTED</tabstop>
   <tabstop>checkBox_TREND</tabstop>
   <tabstop>btn_RUN</tabstop>
  </tabstops>
