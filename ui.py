@@ -13,7 +13,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 # from matplotlib.figure import Figure
 
 # UI파일 연결
+import ui
+
 form_class = uic.loadUiType("FireUI.ui")[0]
+
+
+
+class About(QWidget):
+    def initUI(self):
+        self.setWindowTitle('Fire')
+        self.setWindowIcon(QIcon('.ico\\Fire.png'))
 
 #화면을 띄우는데 사용되는 Class 선언
 class WindowClass(QMainWindow, form_class) :
@@ -29,6 +38,7 @@ class WindowClass(QMainWindow, form_class) :
         self.initSTATUS()
         self.initMENU()
         self.initBTN()
+
 
     # Button initial
     def initBTN(self):
@@ -82,12 +92,30 @@ class WindowClass(QMainWindow, form_class) :
 
     # 꺾은선 선택
     def initRadBtnCurved(self):
-        global lineopt
         lineopt = 0
+        WindowClass.initLineOpt(lineopt)
         print(lineopt)
 
     # 분산형 선택
     def initRadBtnDistributed(self):
-        global lineopt
         lineopt = 1
+        WindowClass.initLineOpt(lineopt)
         print(lineopt)
+
+    # 라디오 버튼 옵션값, 문제 시 전역변수로 변경할 것
+    def initLineOpt(self):
+        opt = self
+
+    # 추세선 체크박스
+    def initCheckTrend(self):
+        self.checkBox_TREND.toggle()
+
+    # 종료이벤트
+    def initCloseEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', 'Are you sure to quit?',
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
