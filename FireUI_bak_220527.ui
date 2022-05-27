@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
+    <width>475</width>
     <height>745</height>
    </rect>
   </property>
@@ -283,19 +283,16 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
-         <width>105</width>
-         <height>139</height>
+         <y>10</y>
+         <width>91</width>
+         <height>121</height>
         </rect>
        </property>
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
-       </property>
-       <property name="indent">
-        <number>0</number>
        </property>
       </widget>
      </widget>
