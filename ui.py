@@ -10,9 +10,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# from matplotlib.backends.backend_qt5agg import FigureCanvasQT as FigureCanvas
-# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-# from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQT as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 
 
 
@@ -149,7 +149,9 @@ class WindowClass(QMainWindow, form_class) :
         self.checkBox_TREND.setEnabled(True)
 
     def initPlotGraph(self):
-        self.widget_GRAPH
+        fig = plt.Figure()
+        canvas = FigureCanvas(fig)
+
 
 
     # Close Event
