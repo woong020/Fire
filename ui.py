@@ -188,8 +188,8 @@ class WindowClass(QMainWindow, form_class) :
                                                           self.labelgetFILE3.text(), self.labelgetFILE4.text())
             df_local, df_local_corr, opt = graph.setFrame2Inf(data1, data2, data3, data4)
             self.fig.clear()
+            ax = self.fig.add_subplot(111)
             if self.radiobtn_HEATMAP.isChecked():
-                ax = self.fig.add_subplot(111)
                 graph.setInf2Heat(df_local_corr, areacode, ax)
                 self.fig.tight_layout()
                 self.canvas.draw()
@@ -200,11 +200,18 @@ class WindowClass(QMainWindow, form_class) :
                 if contentsname == 'Select':
                     QMessageBox.information(self, "Error", "Please Select Contents")
                 else:
-                    ax = self.fig.add_subplot(111)
                     contentscode = WindowClass.initComboContents(contentsname)
-                    graph.setInf2Reg(df_local, areacode, contentscode, opt, ax)
-                    # self.fig.tight_layout()
+                    if self.checkBox_TREND.isChecked():
+                        # ax = self.fig.add_subplot(111)
+                        graph.initReg.setInf2Reg(df_local, areacode, contentscode, opt, ax)
+                    else:
+                        graph.initReg.setInf2RegisnotCheck(df_local, areacode, contentscode, opt, ax)
+                    self.fig.tight_layout()
                     self.canvas.draw()
+                    self.statusBar().showMessage('Executed Regplot')
+
+
+
 
 
 

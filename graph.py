@@ -31,16 +31,13 @@ def setFrame2Inf(data1, data2, data3, data4):
     df_local = []
     df_local_corr = []
     for i in range(18):
-        df_local.append(0)
-        df_local_corr.append(0)
+        df_local.append(0) #지역을 필터로 4개 옵션 비교를 위해 리스트 작성
+        df_local_corr.append(0) #지역을 필터로 4개 옵션 비교 상관계수를 설정하기 위해 리스트 작성
 
-    newopt = []
     # 옵션별 데이터 행열 변환
     for i in range(len(opt)):
         df = opt[i].set_index('시도별')  # 인덱스 시도별 열로 변경
         opt[i] = df.transpose()  # 행열 전환
-        newopt.append(opt[i])
-
 
     # 지역별 데이터 인덱스 설정 후 행열 변환
     for i in range(len(local)):
@@ -62,22 +59,36 @@ def setFrame2Inf(data1, data2, data3, data4):
 
     opt_corr[0] = opt[0].corr(method='pearson')  # 지역별 무연고 사망자 상관계수 분석(전국~충남)
 
-    opt = [data1, data2, data3, data4]
-
-    return df_local, df_local_corr, newopt
+    return df_local, df_local_corr, opt
 
 
 def setInf2Heat(df_local_corr, i, ax):
     sns.heatmap(df_local_corr[i], annot = True, fmt = '.6f', linewidths = .5, cbar_kws={"shrink": .5},
                 cmap = 'RdYlBu_r', vmin = -1, vmax =1, ax = ax)
     ax.set_title("<1인가구와 고독사 현황>")
-    # ax.set_xlabel("x")
-    # ax.set_xlabel("y")
 
 
-def setInf2Reg(df_local, i, j, opt, ax):
-    sns.regplot(x = df_local[i].iloc[:, [0]], y = df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'})
-    ax.set_title("<Scatter of 무연고 사망자와 1인가구>")
+class initReg():
+    def setInf2Reg(df_local, i, j, opt, ax):
+        sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
+                    ax = ax)
+        if j == 1:
+            ax.set_title("<Scatter of 무연고 사망자와 기초생활수급자>")
+        elif j == 2:
+            ax.set_title("<Scatter of 무연고 사망자와 1인가구>")
+        elif j == 3:
+            ax.set_title("<Scatter of 무연고 사망자와 실업자>")
+    def setInf2RegisnotCheck(df_local, i, j, opt, ax):
+        sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
+                    fit_reg = False, ax = ax)
+        if j == 1:
+            ax.set_title("<Scatter of 무연고 사망자와 기초생활수급자>")
+        elif j == 2:
+            ax.set_title("<Scatter of 무연고 사망자와 1인가구>")
+        elif j == 3:
+            ax.set_title("<Scatter of 무연고 사망자와 실업자>")
+
+
 
 
 
