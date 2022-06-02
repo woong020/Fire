@@ -43,8 +43,10 @@ class WindowClass(QMainWindow, form_class) :
 
     # AddUI initial
     def initUI(self):
-        self.setWindowTitle('Fire')
-        self.setWindowIcon(QIcon('icon.png'))
+        self.setWindowTitle('Lonely Death')
+        path_dir = os.getcwd()
+        icon_dir = path_dir + "\\.ico\\icon.png"
+        self.setWindowIcon(QIcon(icon_dir))
         self.initSTATUS()
         self.initMENU()
         self.initBTN()
