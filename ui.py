@@ -8,8 +8,8 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import QCoreApplication, QSize, Qt
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import matplotlib.pyplot as plt
-# from mpl_toolkits.mplot3d import Axes3D
-# from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # from matplotlib.backends.backend_qt5agg import FigureCanvasQT as FigureCanvas
 # from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 # from matplotlib.figure import Figure
@@ -27,6 +27,11 @@ class About(QWidget):
         self.show()
 
 
+global filecnt
+filecnt = 0
+global lineopt
+lineopt = 0
+
 #화면을 띄우는데 사용되는 Class 선언
 class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
@@ -41,7 +46,7 @@ class WindowClass(QMainWindow, form_class) :
         self.initSTATUS()
         self.initMENU()
         self.initBTN()
-        self.initCheckTrend()
+        # self.initCheckTrend()
         self.initLOGO()
 
     # Logo initial
@@ -55,10 +60,12 @@ class WindowClass(QMainWindow, form_class) :
 
     # Button initial
     def initBTN(self):
-        self.btnLOADFILE1.clicked.connect(lambda : self.initBtnFileLoad1())
-        self.btnLOADFILE2.clicked.connect(lambda : self.initBtnFileLoad2())
-        self.radiobtn_CURVED.clicked.connect(lambda  : self.initRadBtnCurved())
-        self.radiobtn_DISTRIBUTED.clicked.connect(lambda: self.initRadBtnDistributed())
+        self.btnLOADFILE.clicked.connect(lambda : self.initBtnFileLoad())
+        self.btnRESET.clicked.connect(lambda : self.initBtnFileReset())
+        self.radiobtn_HEATMAP.toggle()
+        self.checkBox_TREND.setEnabled(False)
+        self.radiobtn_HEATMAP.clicked.connect(lambda  : self.initRadBtnHeatmap())
+        self.radiobtn_GRAPH.clicked.connect(lambda: self.initRadBtnGraph())
 
     # StatusBar initial
     def initSTATUS(self):
@@ -80,7 +87,6 @@ class WindowClass(QMainWindow, form_class) :
         aboutAction.setShortcut('Ctrl+H')
         aboutAction.triggered.connect(lambda : QMessageBox.about(self, 'About', abouttext))
 
-
         # Menu bar
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
@@ -90,38 +96,61 @@ class WindowClass(QMainWindow, form_class) :
         helpmenu = menubar.addMenu('&Help')
         helpmenu.addAction(aboutAction)
 
-    # Select File 1
-    def initBtnFileLoad1(self):
-        global fname1
-        fname1 = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
-        self.labelgetFILE1.setText(fname1[0])
-        self.statusBar().showMessage('File1 Ready')
+    # Select File
+    def initBtnFileLoad(self):
+        fname = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
+        global filecnt
 
-    # Select File 2
-    def initBtnFileLoad2(self):
-        global fname2
-        fname2 = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
-        self.labelgetFILE2.setText(fname2[0])
-        self.statusBar().showMessage('File2 Ready')
+        if filecnt == 0:
+            self.labelgetFILE1.setText(fname[0])
+            self.statusBar().showMessage('File1 Ready')
+            filecnt += 1
+
+        elif filecnt == 1:
+            self.labelgetFILE2.setText(fname[0])
+            self.statusBar().showMessage('File2 Ready')
+            filecnt += 1
+
+        elif filecnt == 2:
+            self.labelgetFILE3.setText(fname[0])
+            self.statusBar().showMessage('File3 Ready')
+            filecnt += 1
+
+        elif filecnt == 3:
+            self.labelgetFILE4.setText(fname[0])
+            self.statusBar().showMessage('File4 Ready')
+            filecnt += 1
+        else:
+            QMessageBox.information(self, "Error", "Already all file")
+
+
+    # Select File Reset
+    def initBtnFileReset(self):
+        global filecnt
+        filecnt = 0
+
+        self.labelgetFILE1.setText(' ')
+        self.labelgetFILE2.setText(' ')
+        self.labelgetFILE3.setText(' ')
+        self.labelgetFILE4.setText(' ')
+
 
     # Select Radio 1
-    def initRadBtnCurved(self):
+    def initRadBtnHeatmap(self):
+        global lineopt
         lineopt = 0
-        WindowClass.initLineOpt(lineopt)
+        self.checkBox_TREND.setEnabled(False)
+
 
     # Select Radio 2
-    def initRadBtnDistributed(self):
+    def initRadBtnGraph(self):
+        global lineopt
         lineopt = 1
-        WindowClass.initLineOpt(lineopt)
+        self.checkBox_TREND.setEnabled(True)
 
-    # Radio Button Option Value
-    def initLineOpt(self):
-        opt = self
-        # print(opt)
+    def initPlotGraph(self):
+        self.widget_GRAPH
 
-    # select CheckBox (default : Check)
-    def initCheckTrend(self):
-        self.checkBox_TREND.toggle()
 
     # Close Event
     def closeEvent(self, event,):

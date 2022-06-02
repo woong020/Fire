@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
-    <height>745</height>
+    <width>482</width>
+    <height>842</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -25,7 +25,7 @@
      <x>21</x>
      <y>190</y>
      <width>439</width>
-     <height>91</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -47,9 +47,9 @@
    <widget class="QLabel" name="label_FILE1">
     <property name="geometry">
      <rect>
-      <x>24</x>
+      <x>14</x>
       <y>20</y>
-      <width>41</width>
+      <width>51</width>
       <height>20</height>
      </rect>
     </property>
@@ -73,9 +73,9 @@
    <widget class="QLabel" name="label_FILE2">
     <property name="geometry">
      <rect>
-      <x>24</x>
+      <x>14</x>
       <y>50</y>
-      <width>41</width>
+      <width>51</width>
       <height>20</height>
      </rect>
     </property>
@@ -83,12 +83,64 @@
      <string>파일2 :</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labelgetFILE3">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>80</y>
+      <width>341</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_FILE3">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>80</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>파일3</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_FILE4">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>110</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>파일4</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelgetFILE4">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>110</y>
+      <width>341</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_GRAPH">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>350</y>
+     <y>420</y>
      <width>441</width>
      <height>371</height>
     </rect>
@@ -111,61 +163,39 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>290</y>
+     <y>360</y>
      <width>441</width>
-     <height>51</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QLabel" name="labelgetCOE">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>90</x>
       <y>10</y>
-      <width>421</width>
-      <height>31</height>
+      <width>331</width>
+      <height>21</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_COE">
-         <property name="text">
-          <string>상관계수</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelgetCOE">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QLabel" name="label_REL">
-         <property name="text">
-          <string>상관관계</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelgetREL">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_COE">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>10</y>
+      <width>72</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>상관계수</string>
+    </property>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -187,16 +217,16 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QPushButton" name="btnLOADFILE1">
+          <widget class="QPushButton" name="btnLOADFILE">
            <property name="text">
-            <string>첫번째 파일</string>
+            <string>File Load</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnLOADFILE2">
+          <widget class="QPushButton" name="btnRESET">
            <property name="text">
-            <string>두번째 파일</string>
+            <string>Reset</string>
            </property>
           </widget>
          </item>
@@ -205,6 +235,96 @@
            <item>
             <property name="text">
              <string>지역선택</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>전국</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>서울</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>강원</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>경기</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>경남</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>경북</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>광주</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>대구</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>대전</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>부산</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>세종</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>울산</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>인천</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>전북</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>전남</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>제주</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>충북</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>충남</string>
             </property>
            </item>
           </widget>
@@ -222,31 +342,31 @@
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>81</width>
+         <x>0</x>
+         <y>10</y>
+         <width>101</width>
          <height>111</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QRadioButton" name="radiobtn_CURVED">
+         <widget class="QRadioButton" name="radiobtn_HEATMAP">
           <property name="text">
-           <string>꺾은선</string>
+           <string>Heatmap</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radiobtn_DISTRIBUTED">
+         <widget class="QRadioButton" name="radiobtn_GRAPH">
           <property name="text">
-           <string>분산형</string>
+           <string>Graph</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="checkBox_TREND">
           <property name="text">
-           <string>추세선</string>
+           <string>Trend</string>
           </property>
          </widget>
         </item>
@@ -262,53 +382,40 @@
       <widget class="QPushButton" name="btn_RUN">
        <property name="geometry">
         <rect>
-         <x>-2</x>
+         <x>-12</x>
          <y>-10</y>
-         <width>111</width>
+         <width>121</width>
          <height>161</height>
         </rect>
        </property>
        <property name="text">
-        <string>분석 실행</string>
+        <string>RUN</string>
        </property>
       </widget>
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox_LOGO">
-      <property name="title">
+     <widget class="QLabel" name="label_LOGO">
+      <property name="text">
        <string/>
       </property>
-      <widget class="QLabel" name="label_LOGO">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>105</width>
-         <height>139</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="indent">
-        <number>0</number>
-       </property>
-      </widget>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="indent">
+       <number>0</number>
+      </property>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
  <tabstops>
-  <tabstop>btnLOADFILE1</tabstop>
-  <tabstop>btnLOADFILE2</tabstop>
+  <tabstop>btnLOADFILE</tabstop>
+  <tabstop>btnRESET</tabstop>
   <tabstop>comboBoxAREA</tabstop>
-  <tabstop>radiobtn_CURVED</tabstop>
-  <tabstop>radiobtn_DISTRIBUTED</tabstop>
+  <tabstop>radiobtn_HEATMAP</tabstop>
+  <tabstop>radiobtn_GRAPH</tabstop>
   <tabstop>checkBox_TREND</tabstop>
   <tabstop>btn_RUN</tabstop>
  </tabstops>
