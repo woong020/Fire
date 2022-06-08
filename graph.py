@@ -33,17 +33,13 @@ def setFrame2Inf(data1, data2, data3, data4):
     df_local_corr2 = []
     df_local_corr3 = []
     df_local_corr4 = []
+
     for i in range(18):
         df_local.append(0) # 지역을 필터로 4개 옵션 비교를 위해 리스트 작성
         df_local_corr.append(0) # 지역을 필터로 4개 옵션 비교 상관계수를 설정하기 위해 리스트 작성
-        # df_local_corr2.append(0) # local2 기초생활수급자수와의 상관관계를 위한 리스트 설정
-        # df_local_corr3.append(0) # local3 1인가구수와의 상관관계를 위한 리스트 설정
-        # df_local_corr4.append(0) # local4 실업자수와의 상관관계를 위한 리스트 설정
-
-    # for i in range(len(local)):
-    #     df_local_corr2[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['기초생활수급자_' + local[i]], method='pearson')
-    #     df_local_corr3[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['1인가구_' + local[i]], method='pearson')
-    #     df_local_corr4[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['실업자_' + local[i]], method='pearson')
+        df_local_corr2.append(0) # local2 기초생활수급자수와의 상관관계를 위한 리스트 설정
+        df_local_corr3.append(0) # local3 1인가구수와의 상관관계를 위한 리스트 설정
+        df_local_corr4.append(0) # local4 실업자수와의 상관관계를 위한 리스트 설정
 
     # 옵션별 데이터 행열 변환
     for i in range(len(opt)):
@@ -72,7 +68,13 @@ def setFrame2Inf(data1, data2, data3, data4):
     for i in range(len(df_local)):
         df_local_corr[i] = df_local[i].corr(method='pearson')  # 전국 무연고 사망자 기준 상관계수 분석(기초생활수급자/1인가구/실업자)
 
-    return df_local, df_local_corr, opt
+    # 무연고 사망자수와 다른 옵션들(기초생활수급자/1인가구/실업자와의 상관관계 값 표시)
+    for i in range(len(local)):
+        df_local_corr2[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['기초생활수급자_' + local[i]], method='pearson')
+        df_local_corr3[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['1인가구_' + local[i]], method='pearson')
+        df_local_corr4[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['실업자_' + local[i]], method='pearson')
+
+    return df_local, df_local_corr, opt, df_local_corr2, df_local_corr3, df_local_corr4
 
 
 def setInf2Heat(df_local_corr, i, ax):
@@ -83,54 +85,66 @@ def setInf2Heat(df_local_corr, i, ax):
     ax.set_xticklabels(ax.get_xticklabels(), size=7)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
 
-# def initCorrHeatmap(df_local_corr, i):
-#     p = i  # 지역코드 i 를 p에 할당
-#     local = ['전국', '서울', '강원', '경기', '경남', '경북', '광주', '대구', '대전',
-#              '부산', '세종', '울산', '인천', '전북', '전남', '제주', '충북', '충남']  # 지역 코드
-#
-#     if df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
-#             df_local_corr[p]['실업자_' + local[p]][0]:
-#         x = '기초생활수급자 > 1인가구 > 실업자'
-#     elif df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
-#             df_local_corr[p]['1인가구_' + local[p]][0]:
-#         x = '기초생활수급자 > 실업자 > 1인가구'
-#     elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
-#             df_local_corr[p]['실업자_' + local[p]][0]:
-#         x = '1인가구 > 기초생활수급자 > 실업자'
-#     elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
-#             df_local_corr[p]['기초생활수급자_' + local[p]][0]:
-#         x = '1인가구 > 실업자 > 기초생활수급자'
-#     elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
-#             df_local_corr[p]['1인가구_' + local[p]][0]:
-#         x = '실업자 > 기초생활수급자 > 1인가구'
-#     elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
-#             df_local_corr[p]['기초생활수급자_' + local[p]][0]:
-#         x = '실업자 > 1인가구 > 기초생활수급자'
-#
-#     res = local[p] + ':' + x
-#     return res
+def initCorrHeatmap(df_local_corr, i):
+    p = i  # 지역코드 i 를 p에 할당
+    local = ['전국', '서울', '강원', '경기', '경남', '경북', '광주', '대구', '대전',
+             '부산', '세종', '울산', '인천', '전북', '전남', '제주', '충북', '충남']  # 지역 코드
+
+    if df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
+            df_local_corr[p]['실업자_' + local[p]][0]:
+        x = '기초생활수급자 > 1인가구 > 실업자'
+    elif df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
+            df_local_corr[p]['1인가구_' + local[p]][0]:
+        x = '기초생활수급자 > 실업자 > 1인가구'
+    elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
+            df_local_corr[p]['실업자_' + local[p]][0]:
+        x = '1인가구 > 기초생활수급자 > 실업자'
+    elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
+            df_local_corr[p]['기초생활수급자_' + local[p]][0]:
+        x = '1인가구 > 실업자 > 기초생활수급자'
+    elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
+            df_local_corr[p]['1인가구_' + local[p]][0]:
+        x = '실업자 > 기초생활수급자 > 1인가구'
+    elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
+            df_local_corr[p]['기초생활수급자_' + local[p]][0]:
+        x = '실업자 > 1인가구 > 기초생활수급자'
+
+    res = local[p] + ' : ' + x
+    return res
 
 
 
 class initReg():
-    def setInf2Reg(df_local, i, j, opt, ax):
+    def setInf2Reg(df_local, i, j, opt, ax, corr1, corr2, corr3):
         graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
                     ax = ax)
         graph.ticklabel_format(axis='y', useOffset=False, style='plain')  # y축 숫자 그대로 표기하기(없으면 과학적 표기로 변경됨)
         if j == 1:
             ax.set_title("<Scatter of 무연고 사망자와 기초생활수급자>")
+            res = str(corr1[i])
+            return res
         elif j == 2:
             ax.set_title("<Scatter of 무연고 사망자와 1인가구>")
+            res = str(corr2[i])
+            return res
         elif j == 3:
             ax.set_title("<Scatter of 무연고 사망자와 실업자>")
-    def setInf2RegisnotCheck(df_local, i, j, opt, ax):
+            res = str(corr3[i])
+            return res
+    def setInf2RegisnotCheck(df_local, i, j, opt, ax, corr1, corr2, corr3):
         graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
                     fit_reg = False, ax = ax)
         graph.ticklabel_format(axis='y', useOffset=False, style='plain')  # y축 숫자 그대로 표기하기(없으면 과학적 표기로 변경됨)
         if j == 1:
             ax.set_title("<Scatter of 무연고 사망자와 기초생활수급자>")
+            res = str(corr1[i])
+            return res
         elif j == 2:
             ax.set_title("<Scatter of 무연고 사망자와 1인가구>")
+            res = str(corr2[i])
+            return res
         elif j == 3:
             ax.set_title("<Scatter of 무연고 사망자와 실업자>")
+            res = str(corr3[i])
+            return res
 

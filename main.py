@@ -1,7 +1,6 @@
 # Source import
 import ui
 
-
 # Pakage import
 import sys
 from PyQt5.QtWidgets import *

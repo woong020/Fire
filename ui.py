@@ -157,6 +157,7 @@ class WindowClass(QMainWindow, form_class) :
     def initPlotGraph(self):
         self.fig = plt.Figure()
         # plt, sns 한글 폰트 옵션
+        plt.rc("font", family="Malgun Gothic")
         sns.set(font="Malgun Gothic",
                 rc={"figure.figsize":(5, 5), "axes.unicode_minus": False}, style='darkgrid')
 
@@ -185,7 +186,8 @@ class WindowClass(QMainWindow, form_class) :
                 data1, data2, data3, data4 = graph.setDataCsv(self.labelgetFILE1.text(), self.labelgetFILE2.text(),
                                                               self.labelgetFILE3.text(), self.labelgetFILE4.text())
                 # read 된 csv dataframe화
-                df_local, df_local_corr, opt = graph.setFrame2Inf(data1, data2, data3, data4)
+                df_local, df_local_corr, opt, df_local2, df_local3, df_local4 = \
+                    graph.setFrame2Inf(data1, data2, data3, data4)
 
                 # fig(plt.Figure) 초기화 및 subplot 생성
                 self.fig.clear()
@@ -197,6 +199,9 @@ class WindowClass(QMainWindow, form_class) :
                     self.fig.tight_layout()
                     self.canvas.draw()
                     self.statusBar().showMessage('Executed Heatmap')
+                    corr = graph.initCorrHeatmap(df_local_corr, areacode)
+                    self.labelgetCORR.setText(corr)
+
 
                 # regplot 생성
                 else:
@@ -208,10 +213,13 @@ class WindowClass(QMainWindow, form_class) :
                     else:
                         contentscode = WindowClass.initComboContents(contentsname)
                         if self.checkBox_TREND.isChecked():
-                            # ax = self.fig.add_subplot(111)
-                            graph.initReg.setInf2Reg(df_local, areacode, contentscode, opt, ax)
+                            corr = graph.initReg.setInf2Reg(df_local, areacode, contentscode, opt, ax,
+                                                     df_local2, df_local3, df_local4)
+                            self.labelgetCORR.setText(corr)
                         else:
-                            graph.initReg.setInf2RegisnotCheck(df_local, areacode, contentscode, opt, ax)
+                            corr = graph.initReg.setInf2RegisnotCheck(df_local, areacode, contentscode, opt, ax,
+                                                               df_local2, df_local3, df_local4)
+                            self.labelgetCORR.setText(corr)
                         self.fig.tight_layout()
                         self.canvas.draw()
                         self.statusBar().showMessage('Executed Regplot')
@@ -270,8 +278,6 @@ class WindowClass(QMainWindow, form_class) :
             contentscode = 3
 
         return contentscode
-
-
 
     # Close Event
     def closeEvent(self, event,):
