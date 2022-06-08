@@ -54,7 +54,7 @@ class WindowClass(QMainWindow, form_class) :
     def initBTN(self):
         self.btn_LOADFILE.clicked.connect(lambda : self.initBtnFileLoad())
         self.btn_RESET.clicked.connect(lambda : self.initBtnFileReset())
-        self.btn_RUN.clicked.connect(lambda: self.initBtnRun())
+        self.btn_RUN.clicked.connect(lambda : self.initBtnRun())
         # 실행 시 Heatmap radio button 클릭 상태
         self.radiobtn_HEATMAP.toggle()
         # 실행 시 추세선, contents combobox 비활성화
@@ -157,7 +157,6 @@ class WindowClass(QMainWindow, form_class) :
     def initPlotGraph(self):
         self.fig = plt.Figure()
         # plt, sns 한글 폰트 옵션
-        plt.rc("font", family="Malgun Gothic")
         sns.set(font="Malgun Gothic",
                 rc={"figure.figsize":(5, 5), "axes.unicode_minus": False}, style='darkgrid')
 
@@ -172,7 +171,7 @@ class WindowClass(QMainWindow, form_class) :
 
     # Run Button initial
     def initBtnRun(self):
-        if self.labelgetFILE4.text() == ' ':
+        if self.labelgetFILE4.text() == '':
             QMessageBox.information(self, "Error", "Please File load")
         else:
             combo_area = self.comboBoxAREA.currentText()
@@ -216,10 +215,6 @@ class WindowClass(QMainWindow, form_class) :
                         self.fig.tight_layout()
                         self.canvas.draw()
                         self.statusBar().showMessage('Executed Regplot')
-
-    def initCorr(self):
-
-
 
 
     # Combobox Area to AreaCode

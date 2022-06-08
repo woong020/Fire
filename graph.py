@@ -36,20 +36,21 @@ def setFrame2Inf(data1, data2, data3, data4):
     for i in range(18):
         df_local.append(0) # 지역을 필터로 4개 옵션 비교를 위해 리스트 작성
         df_local_corr.append(0) # 지역을 필터로 4개 옵션 비교 상관계수를 설정하기 위해 리스트 작성
-        df_local_corr2.append(0) # local2 기초생활수급자수와의 상관관계를 위한 리스트 설정
-        df_local_corr3.append(0) # local3 1인가구수와의 상관관계를 위한 리스트 설정
-        df_local_corr4.append(0) # local4 실업자수와의 상관관계를 위한 리스트 설정
+        # df_local_corr2.append(0) # local2 기초생활수급자수와의 상관관계를 위한 리스트 설정
+        # df_local_corr3.append(0) # local3 1인가구수와의 상관관계를 위한 리스트 설정
+        # df_local_corr4.append(0) # local4 실업자수와의 상관관계를 위한 리스트 설정
 
-    for i in range(len(local)):
-        df_local_corr2[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['기초생활수급자_' + local[i]], method='pearson')
-        df_local_corr3[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['1인가구_' + local[i]], method='pearson')
-        df_local_corr4[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['실업자_' + local[i]], method='pearson')
+    # for i in range(len(local)):
+    #     df_local_corr2[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['기초생활수급자_' + local[i]], method='pearson')
+    #     df_local_corr3[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['1인가구_' + local[i]], method='pearson')
+    #     df_local_corr4[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['실업자_' + local[i]], method='pearson')
 
     # 옵션별 데이터 행열 변환
     for i in range(len(opt)):
         df = opt[i].set_index('시도별')  # 인덱스 시도별 열로 변경
         opt[i] = df.transpose()  # 행열 전환
 
+    # 세종시 결측치 보완
     opt[2]['세종'] = opt[2]['세종'].fillna(method='backfill')
     opt[3]['세종'] = opt[3]['세종'].fillna(method='backfill')
 
@@ -68,45 +69,47 @@ def setFrame2Inf(data1, data2, data3, data4):
     for i in range(len(local)):
         df_local[i].drop(local, axis=1, inplace=True)
 
-    for i in range(len(local)):
-        df_local_corr[i] = df_local[i].corr(method='pearson')  # 전국 무연고 사망자 기준 상관계수 분석(기초생활수급자/1인가구/실업자)
-
     for i in range(len(df_local)):
         df_local_corr[i] = df_local[i].corr(method='pearson')  # 전국 무연고 사망자 기준 상관계수 분석(기초생활수급자/1인가구/실업자)
-
-    p = 0  # 상관성 높은수서를 나타내기위한 변수 선정
-
-    if df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
-            df_local_corr[p]['실업자_' + local[p]][0]:
-        x = '기초생활수급자 > 1인가구 > 실업자'
-    elif df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
-            df_local_corr[p]['1인가구_' + local[p]][0]:
-        x = '기초생활수급자 > 실업자 > 1인가구'
-    elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
-            df_local_corr[p]['실업자_' + local[p]][0]:
-        x = '1인가구 > 기초생활수급자 > 실업자'
-    elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
-            df_local_corr[p]['기초생활수급자_' + local[p]][0]:
-        x = '1인가구 > 실업자 > 기초생활수급자'
-    elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
-            df_local_corr[p]['1인가구_' + local[p]][0]:
-        x = '실업자 > 기초생활수급자 > 1인가구'
-    elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
-            df_local_corr[p]['기초생활수급자_' + local[p]][0]:
-        x = '실업자 > 1인가구 > 기초생활수급자'
-
-    print('무연고사망자와의 상관관계값 크기 비교(', local[p], '):', x)
-
 
     return df_local, df_local_corr, opt
 
 
 def setInf2Heat(df_local_corr, i, ax):
-    # sns.heatmap(df_local_corr[i], annot = True, fmt = '.6f', linewidths = .5, cbar_kws={"shrink": .5},
-    #             cmap = 'RdYlBu_r', vmin = 0.5, vmax =1, ax = ax)
     sns.heatmap(df_local_corr[i], annot=True, fmt='.6f', linewidths=.5, cbar=True,
                 cbar_kws={"shrink": .5}, cmap='RdYlBu_r', vmin=0.4, vmax=1, ax=ax)  # 'RdYlBu_r' 'YIGnBu'
     ax.set_title("<1인가구와 고독사 현황>")
+    ax.set_yticklabels(ax.get_yticklabels(), size=7)
+    ax.set_xticklabels(ax.get_xticklabels(), size=7)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
+
+# def initCorrHeatmap(df_local_corr, i):
+#     p = i  # 지역코드 i 를 p에 할당
+#     local = ['전국', '서울', '강원', '경기', '경남', '경북', '광주', '대구', '대전',
+#              '부산', '세종', '울산', '인천', '전북', '전남', '제주', '충북', '충남']  # 지역 코드
+#
+#     if df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
+#             df_local_corr[p]['실업자_' + local[p]][0]:
+#         x = '기초생활수급자 > 1인가구 > 실업자'
+#     elif df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
+#             df_local_corr[p]['1인가구_' + local[p]][0]:
+#         x = '기초생활수급자 > 실업자 > 1인가구'
+#     elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
+#             df_local_corr[p]['실업자_' + local[p]][0]:
+#         x = '1인가구 > 기초생활수급자 > 실업자'
+#     elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
+#             df_local_corr[p]['기초생활수급자_' + local[p]][0]:
+#         x = '1인가구 > 실업자 > 기초생활수급자'
+#     elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
+#             df_local_corr[p]['1인가구_' + local[p]][0]:
+#         x = '실업자 > 기초생활수급자 > 1인가구'
+#     elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
+#             df_local_corr[p]['기초생활수급자_' + local[p]][0]:
+#         x = '실업자 > 1인가구 > 기초생활수급자'
+#
+#     res = local[p] + ':' + x
+#     return res
+
 
 
 class initReg():
