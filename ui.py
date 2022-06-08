@@ -2,40 +2,28 @@
 import graph
 
 # import package
-import sys
 import os.path
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import QCoreApplication, QSize, Qt
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-import pandas as pd
-import numpy as np
+from PyQt5.QtCore import QSize, Qt
+from PyQt5 import uic
 import matplotlib.pyplot as plt
 import seaborn as sns
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# from matplotlib.backends.backend_qt5agg import FigureCanvasQT as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
+
 
 
 # UI파일 연결
 form_class = uic.loadUiType("FireUI.ui")[0]
 
-class About(QWidget):
-    def initUI(self):
-        self.setWindowTitle('Fire')
-        self.setWindowIcon(QIcon('.ico\\Fire.png'))
-        self.show()
-
-
 global filecnt
 filecnt = 0
-global lineopt
-lineopt = 0
+
 
 #화면을 띄우는데 사용되는 Class 선언
 class WindowClass(QMainWindow, form_class) :
+    # Main initial
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -67,12 +55,13 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_LOADFILE.clicked.connect(lambda : self.initBtnFileLoad())
         self.btn_RESET.clicked.connect(lambda : self.initBtnFileReset())
         self.btn_RUN.clicked.connect(lambda: self.initBtnRun())
+        # 실행 시 Heatmap radio button 클릭 상태
         self.radiobtn_HEATMAP.toggle()
+        # 실행 시 추세선, contents combobox 비활성화
         self.checkBox_TREND.setEnabled(False)
         self.comboBoxCONTENTS.setEnabled(False)
         self.radiobtn_HEATMAP.clicked.connect(lambda  : self.initRadBtnHeatmap())
         self.radiobtn_GRAPH.clicked.connect(lambda: self.initRadBtnGraph())
-
 
     # StatusBar initial
     def initSTATUS(self):
@@ -130,7 +119,6 @@ class WindowClass(QMainWindow, form_class) :
         else:
             QMessageBox.information(self, "Error", "All files are ready")
 
-
     # Select File Reset
     def initBtnFileReset(self):
         global filecnt
@@ -156,6 +144,7 @@ class WindowClass(QMainWindow, form_class) :
     # Select Radio 2
     def initRadBtnGraph(self):
         self.checkBox_TREND.setEnabled(True)
+        self.checkBox_TREND.toggle()
         self.comboBoxCONTENTS.setEnabled(True)
         self.statusBar().showMessage('select Graph')
 
@@ -167,53 +156,68 @@ class WindowClass(QMainWindow, form_class) :
     # initial Graph
     def initPlotGraph(self):
         self.fig = plt.Figure()
+        # plt, sns 한글 폰트 옵션
         plt.rc("font", family="Malgun Gothic")
         sns.set(font="Malgun Gothic",
                 rc={"figure.figsize":(5, 5), "axes.unicode_minus": False}, style='darkgrid')
 
+        # canvas 생성
         self.canvas = FigureCanvas(self.fig)
         toolbar = WindowClass.initToolBar(self.canvas, self)
         self.canvas.draw()
 
+        # toolbar, canvas 정렬
         self.verticalLayout_plot.addWidget(toolbar)
         self.verticalLayout_plot.addWidget(self.canvas)
 
     # Run Button initial
     def initBtnRun(self):
-        combo_area = self.comboBoxAREA.currentText()
-        if combo_area == 'Select':
-            QMessageBox.information(self, "Error", "Please Select Area")
-
+        if self.labelgetFILE4.text() == ' ':
+            QMessageBox.information(self, "Error", "Please File load")
         else:
-            areacode = WindowClass.initComboArea(combo_area)
-            data1, data2, data3, data4 = graph.setDataCsv(self.labelgetFILE1.text(), self.labelgetFILE2.text(),
-                                                          self.labelgetFILE3.text(), self.labelgetFILE4.text())
-            df_local, df_local_corr, opt = graph.setFrame2Inf(data1, data2, data3, data4)
-            self.fig.clear()
-            ax = self.fig.add_subplot(111)
-            if self.radiobtn_HEATMAP.isChecked():
-                graph.setInf2Heat(df_local_corr, areacode, ax)
-                self.fig.tight_layout()
-                self.canvas.draw()
-                self.statusBar().showMessage('Executed Heatmap')
+            combo_area = self.comboBoxAREA.currentText()
+            if combo_area == 'Select':
+                QMessageBox.information(self, "Error", "Please Select Area")
 
             else:
-                contentsname = self.comboBoxCONTENTS.currentText()
-                if contentsname == 'Select':
-                    QMessageBox.information(self, "Error", "Please Select Contents")
-                else:
-                    contentscode = WindowClass.initComboContents(contentsname)
-                    if self.checkBox_TREND.isChecked():
-                        # ax = self.fig.add_subplot(111)
-                        graph.initReg.setInf2Reg(df_local, areacode, contentscode, opt, ax)
-                    else:
-                        graph.initReg.setInf2RegisnotCheck(df_local, areacode, contentscode, opt, ax)
+                areacode = WindowClass.initComboArea(combo_area)
+
+                # file path 전달 및 csv read
+                data1, data2, data3, data4 = graph.setDataCsv(self.labelgetFILE1.text(), self.labelgetFILE2.text(),
+                                                              self.labelgetFILE3.text(), self.labelgetFILE4.text())
+                # read 된 csv dataframe화
+                df_local, df_local_corr, opt = graph.setFrame2Inf(data1, data2, data3, data4)
+
+                # fig(plt.Figure) 초기화 및 subplot 생성
+                self.fig.clear()
+                ax = self.fig.add_subplot(111)
+
+                # Heatmap 그래프 생성
+                if self.radiobtn_HEATMAP.isChecked():
+                    graph.setInf2Heat(df_local_corr, areacode, ax)
                     self.fig.tight_layout()
                     self.canvas.draw()
-                    self.statusBar().showMessage('Executed Regplot')
+                    self.statusBar().showMessage('Executed Heatmap')
 
+                # regplot 생성
+                else:
+                    contentsname = self.comboBoxCONTENTS.currentText()
+                    if contentsname == 'Select':
+                        QMessageBox.information(self, "Error", "Please Select Contents")
 
+                    # 추세선 옵션에 따른 if문
+                    else:
+                        contentscode = WindowClass.initComboContents(contentsname)
+                        if self.checkBox_TREND.isChecked():
+                            # ax = self.fig.add_subplot(111)
+                            graph.initReg.setInf2Reg(df_local, areacode, contentscode, opt, ax)
+                        else:
+                            graph.initReg.setInf2RegisnotCheck(df_local, areacode, contentscode, opt, ax)
+                        self.fig.tight_layout()
+                        self.canvas.draw()
+                        self.statusBar().showMessage('Executed Regplot')
 
+    def initCorr(self):
 
 
 

@@ -30,14 +30,28 @@ def setFrame2Inf(data1, data2, data3, data4):
 
     df_local = []
     df_local_corr = []
+    df_local_corr2 = []
+    df_local_corr3 = []
+    df_local_corr4 = []
     for i in range(18):
-        df_local.append(0) #지역을 필터로 4개 옵션 비교를 위해 리스트 작성
-        df_local_corr.append(0) #지역을 필터로 4개 옵션 비교 상관계수를 설정하기 위해 리스트 작성
+        df_local.append(0) # 지역을 필터로 4개 옵션 비교를 위해 리스트 작성
+        df_local_corr.append(0) # 지역을 필터로 4개 옵션 비교 상관계수를 설정하기 위해 리스트 작성
+        df_local_corr2.append(0) # local2 기초생활수급자수와의 상관관계를 위한 리스트 설정
+        df_local_corr3.append(0) # local3 1인가구수와의 상관관계를 위한 리스트 설정
+        df_local_corr4.append(0) # local4 실업자수와의 상관관계를 위한 리스트 설정
+
+    for i in range(len(local)):
+        df_local_corr2[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['기초생활수급자_' + local[i]], method='pearson')
+        df_local_corr3[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['1인가구_' + local[i]], method='pearson')
+        df_local_corr4[i] = df_local[i]['무연고_' + local[i]].corr(df_local[i]['실업자_' + local[i]], method='pearson')
 
     # 옵션별 데이터 행열 변환
     for i in range(len(opt)):
         df = opt[i].set_index('시도별')  # 인덱스 시도별 열로 변경
         opt[i] = df.transpose()  # 행열 전환
+
+    opt[2]['세종'] = opt[2]['세종'].fillna(method='backfill')
+    opt[3]['세종'] = opt[3]['세종'].fillna(method='backfill')
 
     # 지역별 데이터 인덱스 설정 후 행열 변환
     for i in range(len(local)):
@@ -57,21 +71,49 @@ def setFrame2Inf(data1, data2, data3, data4):
     for i in range(len(local)):
         df_local_corr[i] = df_local[i].corr(method='pearson')  # 전국 무연고 사망자 기준 상관계수 분석(기초생활수급자/1인가구/실업자)
 
-    opt_corr[0] = opt[0].corr(method='pearson')  # 지역별 무연고 사망자 상관계수 분석(전국~충남)
+    for i in range(len(df_local)):
+        df_local_corr[i] = df_local[i].corr(method='pearson')  # 전국 무연고 사망자 기준 상관계수 분석(기초생활수급자/1인가구/실업자)
+
+    p = 0  # 상관성 높은수서를 나타내기위한 변수 선정
+
+    if df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
+            df_local_corr[p]['실업자_' + local[p]][0]:
+        x = '기초생활수급자 > 1인가구 > 실업자'
+    elif df_local_corr[p]['기초생활수급자_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
+            df_local_corr[p]['1인가구_' + local[p]][0]:
+        x = '기초생활수급자 > 실업자 > 1인가구'
+    elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
+            df_local_corr[p]['실업자_' + local[p]][0]:
+        x = '1인가구 > 기초생활수급자 > 실업자'
+    elif df_local_corr[p]['1인가구_' + local[p]][0] > df_local_corr[p]['실업자_' + local[p]][0] > \
+            df_local_corr[p]['기초생활수급자_' + local[p]][0]:
+        x = '1인가구 > 실업자 > 기초생활수급자'
+    elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['기초생활수급자_' + local[p]][0] > \
+            df_local_corr[p]['1인가구_' + local[p]][0]:
+        x = '실업자 > 기초생활수급자 > 1인가구'
+    elif df_local_corr[p]['실업자_' + local[p]][0] > df_local_corr[p]['1인가구_' + local[p]][0] > \
+            df_local_corr[p]['기초생활수급자_' + local[p]][0]:
+        x = '실업자 > 1인가구 > 기초생활수급자'
+
+    print('무연고사망자와의 상관관계값 크기 비교(', local[p], '):', x)
+
 
     return df_local, df_local_corr, opt
 
 
 def setInf2Heat(df_local_corr, i, ax):
-    sns.heatmap(df_local_corr[i], annot = True, fmt = '.6f', linewidths = .5, cbar_kws={"shrink": .5},
-                cmap = 'RdYlBu_r', vmin = -1, vmax =1, ax = ax)
+    # sns.heatmap(df_local_corr[i], annot = True, fmt = '.6f', linewidths = .5, cbar_kws={"shrink": .5},
+    #             cmap = 'RdYlBu_r', vmin = 0.5, vmax =1, ax = ax)
+    sns.heatmap(df_local_corr[i], annot=True, fmt='.6f', linewidths=.5, cbar=True,
+                cbar_kws={"shrink": .5}, cmap='RdYlBu_r', vmin=0.4, vmax=1, ax=ax)  # 'RdYlBu_r' 'YIGnBu'
     ax.set_title("<1인가구와 고독사 현황>")
 
 
 class initReg():
     def setInf2Reg(df_local, i, j, opt, ax):
-        sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
+        graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
                     ax = ax)
+        graph.ticklabel_format(axis='y', useOffset=False, style='plain')  # y축 숫자 그대로 표기하기(없으면 과학적 표기로 변경됨)
         if j == 1:
             ax.set_title("<Scatter of 무연고 사망자와 기초생활수급자>")
         elif j == 2:
@@ -79,8 +121,9 @@ class initReg():
         elif j == 3:
             ax.set_title("<Scatter of 무연고 사망자와 실업자>")
     def setInf2RegisnotCheck(df_local, i, j, opt, ax):
-        sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
+        graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
                     fit_reg = False, ax = ax)
+        graph.ticklabel_format(axis='y', useOffset=False, style='plain')  # y축 숫자 그대로 표기하기(없으면 과학적 표기로 변경됨)
         if j == 1:
             ax.set_title("<Scatter of 무연고 사망자와 기초생활수급자>")
         elif j == 2:
@@ -88,39 +131,3 @@ class initReg():
         elif j == 3:
             ax.set_title("<Scatter of 무연고 사망자와 실업자>")
 
-
-
-
-
-
-
-
-#상관계수 HeatMap############################################
-# plt.figure(figsize = (13,10))
-# plt.rc('font', family='Malgun Gothic') #그래프 한국어 설정
-#
-# # 지역별 무연고 사망자와 그 외 옵션 상관계수 HEATMAP
-# # df_local_corr[0번부터 17번]까지
-# # ['전국(0)', '서울(1)', '강원(2)', '경기(3)', '경남(4)', '경북(5)', '광주(6)', '대구(7)', '대전(8)',
-# #  '부산(9)', '세종(10)', '울산(11)', '인천(12)', '전북(13)', '전남(14)', '제주(15)', '충북(16)', '충남(17)']
-# sns.heatmap(df_local_corr[0], annot = True, fmt = '.6f', linewidths = .5, cbar_kws={"shrink": .5}, cmap = 'RdYlBu_r', vmin = -1, vmax =1)
-#
-# plt.title("<1인가구와 고독사 현황>", fontsize = 23)
-# plt.show()
-#
-#
-# #산점도 그래프##############################################
-# plt.figure(figsize = (13,10))
-# plt.rc('font', family='Malgun Gothic') #그래프 한국어 설정
-#
-# # df_local[0번부터 17번]까지
-# # ['전국(0)', '서울(1)', '강원(2)', '경기(3)', '경남(4)', '경북(5)', '광주(6)', '대구(7)', '대전(8)',
-# #  '부산(9)', '세종(10)', '울산(11)', '인천(12)', '전북(13)', '전남(14)', '제주(15)', '충북(16)', '충남(17)']
-# # df_local[].iloc[:,[0번부터 3번까지]]
-# # ['무연고(0)', '기초생활수급자(1)', '1인가구(2)', '실업자(3)']
-#
-# # 지역별 무연고 사망자 [0]번의 무연고 사망자와 기초생활수급자 산점도
-# a = sns.regplot(x = df_local[0].iloc[:,[0]], y = df_local[0].iloc[:,[1]], data=opt[0], line_kws={'color': 'red'})
-# a.set_title('Scatter of 무연고 사망자와 1인가구')
-#
-# plt.show()
