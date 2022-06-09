@@ -1,12 +1,8 @@
-# import .py
-import ui
-
 # import package
 import seaborn as sns
 import pandas as pd
-import matplotlib.pyplot as plt
 
-### 시도별 각 자료 데이터 프레임 추가하기
+
 
 def setData2Frame(self):
     data = pd.read_csv(self, encoding='cp949')
@@ -76,7 +72,6 @@ def setFrame2Inf(data1, data2, data3, data4):
 
     return df_local, df_local_corr, opt, df_local_corr2, df_local_corr3, df_local_corr4
 
-
 def setInf2Heat(df_local_corr, i, ax):
     sns.heatmap(df_local_corr[i], annot=True, fmt='.6f', linewidths=.5, cbar=True,
                 cbar_kws={"shrink": .5}, cmap='RdYlBu_r', vmin=0.4, vmax=1, ax=ax)  # 'RdYlBu_r' 'YIGnBu'
@@ -111,7 +106,6 @@ def initCorrHeatmap(df_local_corr, i):
 
     res = local[p] + ' : ' + x
     return res
-
 
 
 class initReg():

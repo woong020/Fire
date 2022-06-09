@@ -198,7 +198,6 @@ class WindowClass(QMainWindow, form_class) :
                     corr = graph.initCorrHeatmap(df_local_corr, areacode)
                     self.labelgetCORR.setText(corr)
 
-
                 # regplot 생성
                 else:
                     contentsname = self.comboBoxCONTENTS.currentText()
