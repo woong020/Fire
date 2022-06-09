@@ -18,7 +18,6 @@ def setDataCsv(data_path_1, data_path_2, data_path_3, data_path_4):
 
 def setFrame2Inf(data1, data2, data3, data4):
     opt = [data1, data2, data3, data4]  # 각 옵션별 데이터 프레임
-    opt_corr = [data1, data2, data3, data4]  # 각 옵션별 상관계수 설정을 위한 데이터 프레임
 
     name = ['무연고', '기초생활수급자', '1인가구', '실업자']  # 특정 지역과 옵션을 묶기 위해 리스트 작성 1
     local = ['전국', '서울', '강원', '경기', '경남', '경북', '광주', '대구', '대전',
