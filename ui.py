@@ -24,12 +24,6 @@ def resource_path(relative_path):
 form = resource_path("FireUI.ui")
 form_class = uic.loadUiType(form)[0]
 
-# form_class = uic.loadUiType("FireUI.ui")[0]
-
-global filecnt
-filecnt = 0
-
-
 #화면을 띄우는데 사용되는 Class 선언
 class WindowClass(QMainWindow, form_class) :
     # Main initial
@@ -101,40 +95,33 @@ class WindowClass(QMainWindow, form_class) :
     # Select File
     def initBtnFileLoad(self):
         fname = QFileDialog.getOpenFileName(self, '', '', 'All File(*);; Exel Data(*.csv)')
-        global filecnt
 
-        if filecnt == 0:
+        if self.labelgetFILE1.text() == '':
             self.labelgetFILE1.setText(fname[0])
             self.statusBar().showMessage('File1 Ready')
-            filecnt += 1
 
-        elif filecnt == 1:
+        elif self.labelgetFILE2.text() == '':
             self.labelgetFILE2.setText(fname[0])
             self.statusBar().showMessage('File2 Ready')
-            filecnt += 1
 
-        elif filecnt == 2:
+        elif self.labelgetFILE3.text() == '':
             self.labelgetFILE3.setText(fname[0])
             self.statusBar().showMessage('File3 Ready')
-            filecnt += 1
 
-        elif filecnt == 3:
+        elif self.labelgetFILE4.text() == '':
             self.labelgetFILE4.setText(fname[0])
             self.statusBar().showMessage('File4 Ready')
-            filecnt += 1
         else:
             QMessageBox.information(self, "Error", "All files are ready")
 
     # Select File Reset
     def initBtnFileReset(self):
-        global filecnt
-        filecnt = 0
         select = "Select"
 
-        self.labelgetFILE1.setText(' ')
-        self.labelgetFILE2.setText(' ')
-        self.labelgetFILE3.setText(' ')
-        self.labelgetFILE4.setText(' ')
+        self.labelgetFILE1.setText('')
+        self.labelgetFILE2.setText('')
+        self.labelgetFILE3.setText('')
+        self.labelgetFILE4.setText('')
         self.fig.clear()
         self.canvas.draw()
         self.radiobtn_HEATMAP.toggle()
