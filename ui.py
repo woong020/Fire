@@ -2,6 +2,7 @@
 import graph
 
 # import package
+import sys
 import os.path
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
@@ -15,7 +16,15 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 
 
 # UI파일 연결
-form_class = uic.loadUiType("FireUI.ui")[0]
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+form = resource_path("FireUI.ui")
+form_class = uic.loadUiType(form)[0]
+
+# form_class = uic.loadUiType("FireUI.ui")[0]
 
 global filecnt
 filecnt = 0
@@ -32,8 +41,7 @@ class WindowClass(QMainWindow, form_class) :
     # AddUI initial
     def initUI(self):
         self.setWindowTitle('Lonely Death')
-        path_dir = os.getcwd()
-        icon_dir = path_dir + "\\.ico\\icon.png"
+        icon_dir = resource_path("./.ico/icon.png")
         self.setWindowIcon(QIcon(icon_dir))
         self.initSTATUS()
         self.initMENU()
@@ -43,9 +51,7 @@ class WindowClass(QMainWindow, form_class) :
 
     # Logo initial
     def initLOGO(self):
-        # logo.png locate find
-        path_dir = os.getcwd()
-        logo_dir = path_dir + "\\.ico\\logo.png"
+        logo_dir = resource_path("./.ico/logo.png")
         logo = QPixmap(logo_dir)
         logo_img = logo.scaled(QSize(100, 100), aspectRatioMode=Qt.KeepAspectRatio)
         self.label_LOGO.setPixmap(logo_img)
@@ -123,6 +129,7 @@ class WindowClass(QMainWindow, form_class) :
     def initBtnFileReset(self):
         global filecnt
         filecnt = 0
+        select = "Select"
 
         self.labelgetFILE1.setText(' ')
         self.labelgetFILE2.setText(' ')
@@ -131,6 +138,8 @@ class WindowClass(QMainWindow, form_class) :
         self.fig.clear()
         self.canvas.draw()
         self.radiobtn_HEATMAP.toggle()
+        self.comboBoxAREA.setCurrentText(select)
+        self.comboBoxCONTENTS.setCurrentText(select)
         self.checkBox_TREND.setEnabled(False)
         self.comboBoxCONTENTS.setEnabled(False)
         self.statusBar().showMessage('Reset All')
