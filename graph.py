@@ -109,7 +109,7 @@ def initCorrHeatmap(df_local_corr, i):
 
 class initReg():
     def setInf2Reg(df_local, i, j, opt, ax, corr1, corr2, corr3):
-        graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
+        graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[i].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
                     ax = ax)
         graph.ticklabel_format(axis='y', useOffset=False, style='plain')  # y축 숫자 그대로 표기하기(없으면 과학적 표기로 변경됨)
         if j == 1:
@@ -125,7 +125,7 @@ class initReg():
             res = str(corr3[i])
             return res
     def setInf2RegisnotCheck(df_local, i, j, opt, ax, corr1, corr2, corr3):
-        graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[0].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
+        graph = sns.regplot(x=df_local[i].iloc[:, [0]], y=df_local[i].iloc[:, [j]], data=opt[0], line_kws={'color': 'red'},
                     fit_reg = False, ax = ax)
         graph.ticklabel_format(axis='y', useOffset=False, style='plain')  # y축 숫자 그대로 표기하기(없으면 과학적 표기로 변경됨)
         if j == 1:
