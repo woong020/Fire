@@ -74,7 +74,7 @@ def setFrame2Inf(data1, data2, data3, data4):
 def setInf2Heat(df_local_corr, i, ax):
     sns.heatmap(df_local_corr[i], annot=True, fmt='.6f', linewidths=.5, cbar=True,
                 cbar_kws={"shrink": .5}, cmap='RdYlBu_r', vmin=0.4, vmax=1, ax=ax)  # 'RdYlBu_r' 'YIGnBu'
-    ax.set_title("<1인가구와 고독사 현황>")
+    ax.set_title("<고독사와의 상관관계>")
     ax.set_yticklabels(ax.get_yticklabels(), size=7)
     ax.set_xticklabels(ax.get_xticklabels(), size=7)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
